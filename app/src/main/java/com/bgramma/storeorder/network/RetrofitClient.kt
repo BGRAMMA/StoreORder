@@ -12,4 +12,5 @@ object RetrofitClient {
         .build()
 
     val menuApi : MenuApi = retrofit.create(MenuApi::class.java)
+    val categoryApi : CategoryApi = retrofit.create(CategoryApi::class.java)
 }

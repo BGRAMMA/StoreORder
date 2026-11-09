@@ -1,5 +1,6 @@
 package com.bgramma.storeorder.ui.menu
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,13 +14,18 @@ class MenuViewModel : ViewModel() {
     private val _menus = MutableLiveData<List<MenuModel>>()
     val menus: LiveData<List<MenuModel>> get() = _menus
 
-    fun fetchMenus() {
+    fun fetchMenus(categoryId : Long) {
         viewModelScope.launch {
-
             try {
-//                _menus.value = RetrofitClient.menuApi.getMenus()
-            } catch (e : Exception) {
+                val response = RetrofitClient.menuApi.getMenusByCategory(categoryId)
 
+                if ( response.isSuccessful ) {
+                    response.body()?.let { menus ->
+                        _menus.value = menus
+                    }
+                }
+            } catch (e : Exception) {
+                Log.e("API_ERROR", "메뉴 수신 실패 : ${e.message}")
             }
         }
     }
